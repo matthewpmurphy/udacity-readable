@@ -15,6 +15,7 @@ class App extends Component {
         <NavBar />
         <div className="col-md-12">
           <Route exact path="/" component={Home}  />
+          <Route exact path="/:category" component={Home} />
           <Route path="/:category/:id" component={PostDetails} />
         </div>
       </div>

@@ -16,7 +16,6 @@ class Home extends Component {
         showModal: false,
         sortBy: 'voteScore',
         ascending: false,
-        category: '',
     }
 
     /**
@@ -41,14 +40,15 @@ class Home extends Component {
     }
 
     /**
-     * @description if the category of state is empty, it calls getPosts and retrieves all posts,
-     *  else it passes the  category from state to getPostsByCategory to populate the list of posts
+     * @description if the category is not, it calls getPosts and retrieves all posts,
+     *  else it passes the  category from url to getPostsByCategory to populate the list of posts
      */
     getPosts = () => {
-        if(this.state.category === '')
+        const { category } = this.props.match.params;
+        if(category === undefined)
             this.props.getPosts(this.state.sortBy, this.state.ascending)
         else
-            this.props.getPostsByCategory(this.state.category, this.state.sortBy, this.state.ascending)
+            this.props.getPostsByCategory(category, this.state.sortBy, this.state.ascending)
     }
 
     /**
@@ -64,11 +64,11 @@ class Home extends Component {
      * @param { event } event - on change event
      */
     handleOnChange = (event) => {
-        this.setState({ category: event.target.value });
+        this.props.history.push(`/${event.target.value}`)
         if(event.target.value === '')
             this.props.getPosts();
         else
-            this.props.getPostsByCategory(event.target.value);
+            this.props.getPostsByCategory(event.target.value)
     }
 
     /**
@@ -87,6 +87,10 @@ class Home extends Component {
      */
     render() {
         const { categories, posts } = this.props;
+        let category = this.props.match.params.category;
+        if(category === undefined)
+            category = '';
+
         return (
             <div className="col-md-12">
                 <div className="row">
@@ -97,7 +101,7 @@ class Home extends Component {
                                     Categories:
                                 </Col>
                                 <Col sm={3}>
-                                    <FormControl componentClass="select" placeholder="select" onChange={this.handleOnChange}>
+                                    <FormControl componentClass="select" placeholder="select" value={category} onChange={this.handleOnChange}>
                                         <option value=''>All Categories</option>
                                         {addOptions(categories)}
                                     </FormControl>
@@ -106,13 +110,13 @@ class Home extends Component {
                         </Form>
                     </div>
                     <div className="col-md-4 text-right">
-                        <Button onClick={this.openModal} bsStyle="primary"><Glyphicon glyph="plus" /> New Post</Button>
+                        <Button bsSize="small" onClick={this.openModal} bsStyle="primary"><Glyphicon glyph="plus" /> New Post</Button>
                     </div>
                 </div>
                 <div className="row">
                     <PostList
                         refresh={this.getPosts}
-                        category={this.state.category}
+                        category={category}
                         categories={this.props.categories}
                         posts={posts} onChange={this.props.getPosts}
                         orderPostsBy={this.updateSort}

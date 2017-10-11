@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { withRouter,Link } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import { Panel, Glyphicon, Well, Modal, Button } from 'react-bootstrap'
 import moment from 'moment'
 import * as PostActions from '../actions/Post'
@@ -86,7 +86,7 @@ class PostDetails extends Component {
         const { post } = this.props
         return(
             <div>
-                <Link to="/"><Glyphicon glyph="arrow-left" /> Back</Link>
+                <Link to="#" onClick={this.props.history.goBack}><Glyphicon glyph="arrow-left" /> Back</Link>
                 {(!post) ? this.noPostFound() : this.detailedPost() }
             </div>
         )
@@ -175,7 +175,7 @@ class PostDetails extends Component {
                                 <h4>Comments</h4>
                             </div>
                             <div className="text-right col-md-4">
-                                <Button onClick={this.openCommentCreateModal} bsStyle="primary"><Glyphicon glyph="plus" /> New Comment</Button>
+                                <Button onClick={this.openCommentCreateModal} bsSize="small" bsStyle="primary"><Glyphicon glyph="plus" /> New Comment</Button>
                                 <CommentForm
                                     error={this.state.error}
                                     message={this.state.message}
