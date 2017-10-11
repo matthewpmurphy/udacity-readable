@@ -3,7 +3,7 @@ import { Navbar, Glyphicon } from 'react-bootstrap';
 
 function NavBar() {
     return (
-        <Navbar inverse>
+        <Navbar fluid={true} inverse>
             <Navbar.Header>
                 <Navbar.Brand>
                     <a href="/"><Glyphicon glyph="book" /> Readable</a>

@@ -47,7 +47,10 @@ class Home extends Component {
 
     handleOnChange = (event) => {
         this.setState({ category: event.target.value });
-        this.props.getPostsByCategory(event.target.value);
+        if(event.target.value === '')
+            this.props.getPosts();
+        else
+            this.props.getPostsByCategory(event.target.value);
     }
 
     newPost = (post) => {
@@ -61,13 +64,13 @@ class Home extends Component {
         return (
             <div className="col-md-12">
                 <div className="row">
-                    <div className="col-md-8">
+                    <div className="col-md-8 text-left">
                         <Form horizontal>
                             <FormGroup controlId="categoryList">
-                                <Col componentClass={ControlLabel} sm={2}>
+                                <Col componentClass={ControlLabel} sm={1}>
                                     Categories:
                                 </Col>
-                                <Col sm={5}>
+                                <Col sm={3}>
                                     <FormControl componentClass="select" placeholder="select" onChange={this.handleOnChange}>
                                         <option value=''>All Categories</option>
                                         {addOptions(categories)}

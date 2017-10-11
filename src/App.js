@@ -10,7 +10,7 @@ class App extends Component {
     return (
       <div>
         <NavBar />
-        <div className="col-md-10 col-md-offset-1">
+        <div className="col-md-12">
           <Route exact path="/" component={Home}  />
           <Route path="/:category/:id" component={PostDetails} />
         </div>
