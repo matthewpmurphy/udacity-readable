@@ -6,8 +6,8 @@ Readable is a React web application that allows a user to create, edit, delete, 
 ![Main Page](/screenshots/home.png)
 
 ### Setup
-- Clone and run the backend server by following the instructions found [here] (https://github.com/udacity/reactnd-project-readable-starter)
-- download this project folder (master branch)
+- Clone and install the backend server by following the instructions found [here] (https://github.com/udacity/reactnd-project-readable-starter)
+- Clone this project (master branch)
 - open your terminal and navigate to project folder
 - make sure you have Node.js and npm installed, or get them [here](https://nodejs.org/it/download)
 - run `npm install` to install all required dependencies
