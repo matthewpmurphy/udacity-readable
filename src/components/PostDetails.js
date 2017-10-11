@@ -1,0 +1,217 @@
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { withRouter,Link } from 'react-router-dom'
+import { Panel, Glyphicon, Well, Modal, Button } from 'react-bootstrap'
+import moment from 'moment'
+import * as PostActions from '../actions/Post'
+import { getAllCategories } from '../actions/Categories'
+import * as CommentsActions from '../actions/Comments'
+import LabelRow from './LabelRow'
+import CommentForm from './CommentForm'
+import Vote from './Vote'
+import EditDeletePost from './EditDeletePost'
+
+class PostDetails extends Component {
+    state = {
+        showCommentEditModal: false,
+        showCommentDeleteModal: false,
+        commentActionType: '',
+        commentId: '',
+        comment: {}
+    }
+
+    openCommentDeleteModal = (id) => {
+        this.setState({ showCommentDeleteModal: true, commentId: id });
+    }
+
+    closeCommentDeleteModal = () => {
+        this.setState({ showCommentDeleteModal: false });
+    }
+
+    openCommentEditModal = (comment) => {
+        this.setState({ showCommentEditModal: true, commentActionType: 'edit', comment: comment});
+    }
+
+    openCommentCreateModal = () => {
+        this.setState({ showCommentEditModal: true, commentActionType: 'new' });
+    }
+
+    closeCommentEditModal = () => {
+        this.setState({ showCommentEditModal: false });
+    }
+
+    editComment = (comment) => {
+        const { success } = this.props.comments;
+        this.props.editComment(comment);
+        if(success) {
+            this.closeCommentEditModal();
+            this.getData();
+        }
+    }
+
+    createComment = (comment) => {
+        this.props.createComment(comment)
+        this.getData();
+        this.closeCommentEditModal();
+    }
+
+    render() {
+        const { post } = this.props
+        return(
+            <div>
+                <Link to="/"><Glyphicon glyph="arrow-left" /> Back</Link>
+                {(!post) ? this.noPostFound() : this.detailedPost() }
+            </div>
+        )
+    }
+
+    getData = () => {
+        const { id } = this.props.match.params;
+        this.props.getPost(id)
+            .then(() => this.props.getComments(id))
+    }
+
+    componentDidMount() {
+        this.getData();
+        this.props.getAllCategories();
+    }
+
+    deleteComment = () => {
+        const { comments } = this.props;
+        this.props.deleteComment(this.state.commentId);
+        if(comments.success) {
+            this.getData();
+            this.closeCommentDeleteModal();
+        }
+    }
+
+    deleteCommentModal = () => {
+        return (
+            <Modal show={this.state.showCommentDeleteModal} onHide={this.closeCommentDeleteModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Glyphicon glyph="remove-sign" className="text-danger" /> Are you sure you want to delete this comment?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={this.closeCommentDeleteModal}>Cancel</Button>
+                    <Button onClick={() => this.deleteComment()} bsStyle="danger">Delete</Button>
+                </Modal.Footer>
+            </Modal>
+        )
+    }
+
+    detailedPost = () => {
+        const { categories, history } = this.props;
+        const { post } = this.props.post;
+        const { comments } = this.props.comments;
+
+        return(
+            <div>
+                <Panel header={post.title} bsStyle="primary">
+                    <div className="row">
+                        <div className="col-md-8">
+                            <LabelRow label="Posted By:" content={post.author} data="" />
+                            <LabelRow label="Posted On:" content={moment(post.timestamp).format("MMMM D, YYYY [at] h:mm A")} data="" />
+                            <LabelRow
+                                label="Vote Score:"
+                                content={post.voteScore}
+                                data={<Vote id={this.props.match.params.id} type="post" refresh={this.getData} />}
+                            />
+                        </div>
+                        <div className="col-md-4 text-right">
+                            <EditDeletePost _post={post} categories={categories} history={history} refresh={this.getData} />
+                        </div>
+                    </div>
+                    <hr />
+                    <div>{post.body}</div>
+                    <hr />
+                    <div className="col-md-10 col-md-offset-1">
+                        <div className="col-md-12">
+                            <div className="col-md-8">
+                                <h4>Comments</h4>
+                            </div>
+                            <div className="text-right col-md-4">
+                                <Button onClick={this.openCommentCreateModal} bsStyle="primary"><Glyphicon glyph="plus" /> New Comment</Button>
+                                <CommentForm
+                                    error={this.state.error}
+                                    message={this.state.message}
+                                    hide={this.closeCommentEditModal}
+                                    show={this.state.showCommentEditModal}
+                                    comment={this.state.comment}
+                                    doEdit={this.editComment}
+                                    create={this.createComment}
+                                    type={this.state.commentActionType}
+                                    postId={post.id}
+                                />
+                                {this.deleteCommentModal()}
+                            </div>
+                        </div>
+                        <div className="col-md-12">
+                            { (comments instanceof Array && comments.length > 0) ? comments.map((comment) => this.showComment(comment))  : <div>No comments found</div> }
+                        </div>
+                    </div>
+                </Panel>
+
+        </div>
+        )
+    }
+
+    showComment = (comment) => {
+        return(
+            <Well key={comment.id}>
+                <div className="row">
+                    <div className="col-md-8">
+                        <LabelRow label="Posted By:" content={comment.author} data="" />
+                        <LabelRow label="Posted On:" content={moment(comment.timestamp).format("MMMM D, YYYY [at] h:mm A")} data="" />
+                        <LabelRow
+                            label="Vote Score:"
+                            content={comment.voteScore}
+                            data={<Vote id={comment.id} type="comment" refresh={this.getData} />}
+                        />
+                    </div>
+                    <div className="col-md-4 text-right">
+                        <span>
+                            <Glyphicon glyph="pencil" className="text-warning clickable" onClick={() => this.openCommentEditModal(comment)} title="Edit Comment" />
+                            &nbsp;
+                            <Glyphicon glyph="remove" className="text-danger clickable" onClick={() => this.openCommentDeleteModal(comment.id)} title="Delete Comment" />
+                        </span>
+                    </div>
+                </div>
+                <hr />
+                <div className="row">
+                    <div className="col-md-12">
+                        {comment.body}
+                    </div>
+                </div>
+            </Well>
+        )
+    }
+
+    noPostFound = () => {
+        return (<div>The post you are looking for could not be found.</div>)
+    }
+}
+
+function mapStateToProps(state) {
+    const {post, comments, categories } = state;
+    return {
+        post,
+        comments,
+        categories
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+      getPost: (id) => dispatch(PostActions.getPost(id)),
+      deleteComment: (id) => dispatch(CommentsActions.deleteComment(id)),
+      editComment: (comment) => dispatch(CommentsActions.editComment(comment)),
+      createComment: (comment) => dispatch(CommentsActions.createComment(comment)),
+      getComments: (id) => dispatch(CommentsActions.getPostComments(id)),
+      getAllCategories: () => dispatch(getAllCategories()),
+    }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PostDetails));

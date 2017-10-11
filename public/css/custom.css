@@ -1,0 +1,12 @@
+/* Title */
+.navbar-inverse .navbar-brand {
+    color: #fff;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.required {
+    color: red;
+}
