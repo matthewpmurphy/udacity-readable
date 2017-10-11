@@ -6,6 +6,12 @@ const initialState = {
     message: ''
 }
 
+/**
+ * @description reducer for post
+ * @param { object } state
+ * @param { object } action
+ * @return details of a post, success of an action, and/or default state
+ */
 export function post(state = initialState, action) {
     const { type, post, ok } = action;
 

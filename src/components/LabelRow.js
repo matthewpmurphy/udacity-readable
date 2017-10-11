@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { Label } from 'react-bootstrap'
 
 class LabelRow extends Component {
-
+    /**
+     * @description display a label along with some content
+     */
     render() {
         const { label, content, data } = this.props;
         return (

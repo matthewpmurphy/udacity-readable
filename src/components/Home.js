@@ -17,22 +17,33 @@ class Home extends Component {
         sortBy: 'voteScore',
         ascending: false,
         category: '',
-        error: false,
-        message: ''
     }
 
+    /**
+      * @description sets the state of showModal to true
+      */
     openModal = () => {
         this.setState({ showModal : true });
     }
 
+    /**
+     * @description sets the state of showModal to false
+     */
     closeModal = () => {
         this.setState({ showModal: false });
     }
 
+    /**
+     * @description calls the orderPostsBy prop and passes it sortBy and acending from state
+     */
     sortPosts = () => {
         this.props.orderPostsBy(this.state.sortBy, this.state.ascending);
     }
 
+    /**
+     * @description if the category of state is empty, it calls getPosts and retrieves all posts,
+     *  else it passes the  category from state to getPostsByCategory to populate the list of posts
+     */
     getPosts = () => {
         if(this.state.category === '')
             this.props.getPosts(this.state.sortBy, this.state.ascending)
@@ -40,11 +51,18 @@ class Home extends Component {
             this.props.getPostsByCategory(this.state.category, this.state.sortBy, this.state.ascending)
     }
 
+    /**
+     * @description sets the state of sortBy and ascending and then passes those values to orderPostsBy to resort the post list
+     */
     updateSort = (field, ascending) => {
         this.setState({ sortBy: field, ascending: ascending })
         this.props.orderPostsBy(field, ascending);
     }
 
+    /**
+     * @description on Category change, let's set the state of category and refresh the list of posts accordingly
+     * @param { event } event - on change event
+     */
     handleOnChange = (event) => {
         this.setState({ category: event.target.value });
         if(event.target.value === '')
@@ -53,12 +71,20 @@ class Home extends Component {
             this.props.getPostsByCategory(event.target.value);
     }
 
+    /**
+     * @description take a post object, pass it to the create post method, refresh the post list, and close the new post modal
+     * @param { object } post object that includes title, author, body, and category
+     */
     newPost = (post) => {
         this.props.createPost(post)
-        this.props.getPosts(this.state.category);
+        this.props.getPosts();
         this.closeModal();
     }
 
+    /**
+     * @description render the home page, a list of post and controls to add/edit/delete/upvote/downvoteposts as well as sort and filter by category.
+     * @return a listing of posts
+     */
     render() {
         const { categories, posts } = this.props;
         return (
@@ -93,17 +119,25 @@ class Home extends Component {
                         sortField={this.state.sortBy}
                         sortAscending={this.state.ascending} />
                 </div>
-                <PostForm create={this.newPost} error={this.state.error} message={this.state.message} hide={this.closeModal} options={addOptions} show={this.state.showModal} categories={categories} />
+                <PostForm create={this.newPost} hide={this.closeModal} options={addOptions} show={this.state.showModal} categories={categories} />
             </div>
         )
     }
 
+    /**
+     * @description when this mounts, get a list off all the categories as well as all the posts
+     */
     componentDidMount() {
         this.props.getAllCategories();
         this.getPosts();
     }
 }
 
+/**
+ * @description return state from redux as props
+ * @param { object } state
+ * @return returns categories and posts as props
+ */
 function mapStateToProps(state) {
     const { posts, categories } = state;
 
@@ -113,6 +147,10 @@ function mapStateToProps(state) {
     }
 }
 
+/**
+ * @description map actions to local props
+ * @param {*} dispatch
+ */
 function mapDispatchToProps(dispatch) {
     return {
         getAllCategories: () => dispatch(getAllCategories()),

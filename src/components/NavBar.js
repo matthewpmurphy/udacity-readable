@@ -2,6 +2,9 @@ import React from 'react';
 import { Navbar, Glyphicon } from 'react-bootstrap';
 
 function NavBar() {
+    /**
+     * @description diplay the navbar for the website
+     */
     return (
         <Navbar fluid={true} inverse>
             <Navbar.Header>

@@ -7,6 +7,12 @@ const initialState = {
     message: ''
 }
 
+/**
+ * @description reducer for comments
+ * @param { object } state
+ * @param { object } action
+ * @return list of non-deleted comments, success, and/or default state
+ */
 export function comments(state = initialState, action) {
     const { type, comments, ok } = action;
 

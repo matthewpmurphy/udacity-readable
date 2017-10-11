@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { Modal, Form, FormGroup, Button, FormControl, Col, ControlLabel } from 'react-bootstrap';
 
 class CommentForm extends Component {
+    /**
+     * @description UI for a modal window to create and edit comments
+     */
     render() {
         return (
             <Modal show={this.props.show} onHide={this.props.hide}>
@@ -38,6 +41,9 @@ class CommentForm extends Component {
         )
     }
 
+    /**
+     * @description validate the comment form, ensure values for author and comment
+     */
     validateForm = () => {
         let valid = true;
 
@@ -54,6 +60,9 @@ class CommentForm extends Component {
         return valid;
     }
 
+    /**
+     * @description Save/Update form if valid
+     */
     saveForm = () => {
         if(this.props.type === 'edit') {
             let { comment } = this.props;

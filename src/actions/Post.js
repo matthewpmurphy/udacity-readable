@@ -2,6 +2,11 @@ import * as ReadableAPI from '../utils/Api';
 import * as Types from './Types';
 import uuid from 'uuid/v4';
 
+/**
+ * @description retrieve a single post
+ * @param { string } id
+ * @return Action type and single post
+ */
 export const getPost = (id) => {
     return dispatch => {
         return ReadableAPI.fetchPost(id)
@@ -11,6 +16,11 @@ export const getPost = (id) => {
     }
 }
 
+/**
+ * @description create a new post
+ * @param { object } post
+ * @return action type and ok (true/false)
+ */
 export const createPost = (post) => {
     post.timestamp = Date.now();
     post.id = uuid();
@@ -23,6 +33,11 @@ export const createPost = (post) => {
     }
 }
 
+/**
+ * @description edit a post
+ * @param { object } post
+ * @return action type and ok (true/false)
+ */
 export const editPost = (post) => {
     post.timestamp = Date.now();
     return dispatch => {
@@ -33,6 +48,11 @@ export const editPost = (post) => {
     }
 }
 
+/**
+ * @description delete a post
+ * @param { string } id
+ * @return action type and ok (true/false)
+ */
 export const deletePost = (id) => {
     return dispatch => {
         return ReadableAPI.deletePost(id)
@@ -42,6 +62,12 @@ export const deletePost = (id) => {
     }
 }
 
+/**
+ * @description create a new post
+ * @param { string } id
+ * @param { string } vote
+ * @return action type and ok (true/false)
+ */
 export const votePost = (id, vote) => {
     return dispatch => {
         return ReadableAPI.doPostVote(id,vote)

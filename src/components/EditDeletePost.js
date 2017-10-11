@@ -12,22 +12,38 @@ class EditDeletePosts extends Component {
         showPostEditModal: false,
     }
 
+    /**
+     * @description set state for showPostEditModal to true to display edit modal
+     */
     openPostEditModal = () => {
         this.setState({ showPostEditModal: true });
     }
 
+    /**
+     * @description set state for showPostEditModal to false to hide modal
+     */
     closePostEditModal = () => {
         this.setState({ showPostEditModal: false });
     }
 
+    /**
+     * @description set state for showPostDeleteModal to true to show modal
+     */
     openPostDeleteModal = () => {
         this.setState({ showPostDeleteModal: true });
     }
 
+    /**
+     * @description set state for showPostDeleteModal to false to hide modal
+     */
     closePostDeleteModal = () => {
         this.setState({ showPostDeleteModal: false });
     }
 
+    /**
+     * @description pass post param to dispatch for editPost to update post
+     * @param { object } post
+     */
     editPost = (post) => {
         this.props.editPost(post)
             .then(() => {
@@ -38,6 +54,10 @@ class EditDeletePosts extends Component {
             })
     }
 
+    /**
+     * @description pass id to dispatch for deleting post
+     * @param { string } id
+     */
     deletePost = (id) => {
         this.props.deletePost(id);
         if(this.props.post.success)
@@ -47,6 +67,9 @@ class EditDeletePosts extends Component {
                 this.props.refresh()
     }
 
+    /**
+     * @description UI for editing/deleting posts, show icons and include modals
+     */
     render() {
         const { _post, categories } = this.props;
         return (
@@ -67,6 +90,9 @@ class EditDeletePosts extends Component {
         )
     }
 
+    /**
+     * @description UI for delete post modal window
+     */
     deletePostModal = () => {
         return (
             <Modal show={this.state.showPostDeleteModal} onHide={this.closePostDeleteModal}>
@@ -88,6 +114,10 @@ class EditDeletePosts extends Component {
 
 }
 
+/**
+ * @description map dispatches for editing and deleting a post to props
+ * @param { object } dispatch
+ */
 function mapDispatchToProps(dispatch) {
     return {
         editPost: (post) => dispatch(PostActions.editPost(post)),
@@ -95,6 +125,10 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
+/**
+ * @description map state for post (redux) to props
+ * @param { object } state
+ */
 function mapStateToProps(state) {
     const { post } = state;
     return {

@@ -6,7 +6,10 @@ import * as CommentsActions from '../actions/Comments'
 import PropTypes from 'prop-types'
 
 class Vote extends Component {
-
+    /**
+     * @description up and downvote interface
+     * @return span with thumbs up and down icons that allow  vting
+     */
     render() {
         const { id, type } = this.props;
         return (
@@ -18,6 +21,12 @@ class Vote extends Component {
         )
     }
 
+    /**
+     * @description upvote posts or comments
+     * @param { string } id
+     * @param { string } type
+     * @return pass vote to api then refresh the ui to show updated voteScore
+     */
     upVote = (id, type) => {
         if(type === 'post') {
             this.props.votePost(id, 'upVote')
@@ -36,6 +45,12 @@ class Vote extends Component {
         }
     }
 
+    /**
+     * @description down posts or comments
+     * @param { string } id
+     * @param { string } type
+     * @return pass vote to api then refresh the ui to show updated voteScore
+     */
     downVote = (id, type) => {
         if(type === 'post') {
             this.props.votePost(id, 'downVote')
@@ -55,6 +70,11 @@ class Vote extends Component {
     }
 }
 
+/**
+ * @description map redux dispatches to props
+ * @param { object } dispatch
+ * @return props for voting on posts and comments
+ */
 function mapDispatchToProps(dispatch) {
     return {
       votePost: (id, vote) => dispatch(PostActions.votePost(id, vote)),
@@ -62,6 +82,11 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
+/**
+ * @description map state to props
+ * @param { object } state
+ * @return post and comments as props
+ */
 function mapStateToProps(state) {
     const { post,comments } = state;
     return {

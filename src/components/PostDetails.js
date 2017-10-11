@@ -20,26 +20,46 @@ class PostDetails extends Component {
         comment: {}
     }
 
+    /**
+     * @description update the state for showCommentDeleteModal and commentId to display the delete modal
+     * @param { string } id
+     */
     openCommentDeleteModal = (id) => {
         this.setState({ showCommentDeleteModal: true, commentId: id });
     }
 
+    /**
+     * @description update the state for showCommentDeleteModal to hide the delete modal
+     */
     closeCommentDeleteModal = () => {
         this.setState({ showCommentDeleteModal: false });
     }
 
+    /**
+     * @description update the state for showCommentEditModal to display that modal as well as the commentAction type and comment
+     */
     openCommentEditModal = (comment) => {
         this.setState({ showCommentEditModal: true, commentActionType: 'edit', comment: comment});
     }
 
+    /**
+     * @description set the showCommentEditModal state to true and the action type to new to open a window to create a new comment
+     */
     openCommentCreateModal = () => {
         this.setState({ showCommentEditModal: true, commentActionType: 'new' });
     }
 
+    /**
+     * @description set the showCommentEditModal state to false to hide it
+     */
     closeCommentEditModal = () => {
         this.setState({ showCommentEditModal: false });
     }
 
+    /**
+     * @description take our comment parameter and pass it to our action dispatch for editing comments
+     * @param { object } comment
+     */
     editComment = (comment) => {
         const { success } = this.props.comments;
         this.props.editComment(comment);
@@ -49,12 +69,19 @@ class PostDetails extends Component {
         }
     }
 
+    /**
+     * @description take comment parameter and pass it to our action dispatch for creating comments
+     * @param { object } comment
+     */
     createComment = (comment) => {
         this.props.createComment(comment)
         this.getData();
         this.closeCommentEditModal();
     }
 
+    /**
+     * @description page UI, display a link back to the home page then display post details if post found
+     */
     render() {
         const { post } = this.props
         return(
@@ -65,17 +92,26 @@ class PostDetails extends Component {
         )
     }
 
+    /**
+     * @description get the post id from the URL, then get the post details and related comments
+     */
     getData = () => {
         const { id } = this.props.match.params;
         this.props.getPost(id)
             .then(() => this.props.getComments(id))
     }
 
+    /**
+     * @description on mount, get the post details and related comments, also grab categories
+     */
     componentDidMount() {
         this.getData();
         this.props.getAllCategories();
     }
 
+    /**
+     * @description delete comment by taking the commentId saved in state and passing it to our action for deleting comments
+     */
     deleteComment = () => {
         const { comments } = this.props;
         this.props.deleteComment(this.state.commentId);
@@ -85,6 +121,9 @@ class PostDetails extends Component {
         }
     }
 
+    /**
+     * @description UI for the delete comment modal
+     */
     deleteCommentModal = () => {
         return (
             <Modal show={this.state.showCommentDeleteModal} onHide={this.closeCommentDeleteModal}>
@@ -102,6 +141,9 @@ class PostDetails extends Component {
         )
     }
 
+    /**
+     * @description UI for display the post details
+     */
     detailedPost = () => {
         const { categories, history } = this.props;
         const { post } = this.props.post;
@@ -158,6 +200,10 @@ class PostDetails extends Component {
         )
     }
 
+    /**
+     * @description UI for displaying a comment
+     * @param { object } comment
+     */
     showComment = (comment) => {
         return(
             <Well key={comment.id}>
@@ -189,11 +235,18 @@ class PostDetails extends Component {
         )
     }
 
+    /**
+     * @description message if api returns no posts
+     */
     noPostFound = () => {
         return (<div>The post you are looking for could not be found.</div>)
     }
 }
 
+/**
+ * @description map our redux state for post, comments, and categories to our props
+ * @param { object } state
+ */
 function mapStateToProps(state) {
     const {post, comments, categories } = state;
     return {
@@ -203,6 +256,10 @@ function mapStateToProps(state) {
     }
 }
 
+/**
+ * @description map our Post, comment, and categories dispatches to our props
+ * @param { object } dispatch
+ */
 function mapDispatchToProps(dispatch) {
     return {
       getPost: (id) => dispatch(PostActions.getPost(id)),

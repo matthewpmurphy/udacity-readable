@@ -1,6 +1,12 @@
 import * as Types from '../actions/Types';
 import sortBy from 'sort-by';
 
+/**
+ * @description reducer for posts
+ * @param { object } state
+ * @param { object } action
+ * @return list of non-deleted posts, sorted posts, and/or default state
+ */
 export function posts(state = {}, action) {
     const { type, posts, orderBy, ascending } = action;
     var updown = '';

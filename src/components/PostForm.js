@@ -4,6 +4,9 @@ import { Modal, Form, FormGroup, Button, FormControl, Col, ControlLabel } from '
 
 class PostForm extends Component {
     render() {
+        /**
+         * @description return modal that includes a form for adding or editing posts
+         */
         return (
             <Modal show={this.props.show} onHide={this.props.hide}>
                 <Modal.Header className="bg-primary" closeButton>
@@ -57,6 +60,9 @@ class PostForm extends Component {
         )
     }
 
+    /**
+     * @description form validation, check to make sure each post includes a title, author, body, and category
+     */
     validateForm = () => {
         let valid = true;
 
@@ -82,6 +88,9 @@ class PostForm extends Component {
         return valid;
     }
 
+    /**
+     * @description if form is validated, save/update the form 
+     */
     saveForm = () => {
         if(this.id.value) {
             let { post } = this.props;

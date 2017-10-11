@@ -5,7 +5,10 @@ import Home from './components/Home';
 import PostDetails from './components/PostDetails';
 
 class App extends Component {
-
+  /**
+    * @description render the applicatino
+    * @return sets up the framework of the application, returns the navbar and the 2 routes within the app
+  **/
   render() {
     return (
       <div>

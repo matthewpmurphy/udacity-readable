@@ -4,7 +4,12 @@ import { Table, Glyphicon } from 'react-bootstrap'
 import moment from 'moment'
 import Vote from './Vote'
 import EditDeletePost from './EditDeletePost'
+import PropTypes from 'prop-types'
+
 class PostList extends Component {
+    /**
+     * @description render the ui for post listings
+     */
     render() {
         const { posts } = this.props
         return (
@@ -25,6 +30,10 @@ class PostList extends Component {
         )
     }
 
+    /**
+     * @description determine which icon to show in column headers for sorting
+     * @param { string } field
+     */
     showIcon = (field) => {
 
         var iconToUse = 'sort';
@@ -44,6 +53,10 @@ class PostList extends Component {
         )
     }
 
+    /**
+     * @description sort clicked column
+     * @param { string } field
+     */
     sortColumn = (field) => {
         if(field === this.props.sortField) {
             this.props.orderPostsBy(field, !this.props.sortAscending);
@@ -53,6 +66,9 @@ class PostList extends Component {
         }
     }
 
+    /**
+     * @description UI element for a table row in the post listing
+     */
     tableRow = (post) =>{
         var link = `/${post.category}/${post.id}`;
         return (
@@ -76,6 +92,17 @@ class PostList extends Component {
             </tr>
         )
     }
+}
+
+PostList.PropTypes = {
+    refresh: PropTypes.func.isRequired,
+    category: PropTypes.string,
+    categories: PropTypes.array.isRequired,
+    posts: PropTypes.object,
+    onChange: PropTypes.func.isRequired,
+    orderPostsBy: PropTypes.func.isRequired,
+    sortField: PropTypes.string.isRequired,
+    sortAscending: PropTypes.bool.isRequired
 }
 
 export default PostList;
